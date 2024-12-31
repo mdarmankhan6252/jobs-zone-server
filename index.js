@@ -53,26 +53,26 @@ async function run() {
          const email = req.query.email;
          const query = { email }
          const existingUser = await usersCollection.findOne(query);
-         if(existingUser){
+         if (existingUser) {
             return
          }
          const result = await usersCollection.insertOne(user)
          res.send(result)
       })
 
-      app.delete('/user/:id', async(req, res) =>{
+      app.delete('/user/:id', async (req, res) => {
          const id = req.params.id;
-         const query = {_id : new ObjectId(id)}
+         const query = { _id: new ObjectId(id) }
          const result = await usersCollection.deleteOne(query);
          res.send(result)
       })
 
-      app.patch('/user/:id', async(req, res) =>{
+      app.patch('/user/:id', async (req, res) => {
          const id = req.params.id;
          const role = req.body.role;
-         const query = {_id : new ObjectId(id)}
+         const query = { _id: new ObjectId(id) }
          const updatedDoc = {
-            $set : {
+            $set: {
                role
             }
          }
@@ -82,39 +82,39 @@ async function run() {
 
       //jobs related api
 
-      app.get('/allJobs', async(req, res) =>{
+      app.get('/allJobs', async (req, res) => {
          const result = await jobsCollection.find().toArray();
          res.send(result)
       })
 
-      app.get('/latestJobs', async(req, res) =>{
-         const result = await jobsCollection.find().sort({_id : -1}).limit(6).toArray();
+      app.get('/latestJobs', async (req, res) => {
+         const result = await jobsCollection.find().sort({ _id: -1 }).limit(6).toArray();
          res.send(result)
       })
 
-      app.get('/jobs', async(req, res) =>{
+      app.get('/jobs', async (req, res) => {
          const page = parseInt(req.query.page) || 0;
          const limit = 6;
          const result = await jobsCollection.find().skip(page * limit).limit(limit).toArray();
          res.send(result)
       })
 
-      app.get('/jobsDetails/:id', async(req, res) =>{
+      app.get('/jobsDetails/:id', async (req, res) => {
          const id = req.params.id;
-         const query = {_id : new ObjectId(id)}
+         const query = { _id: new ObjectId(id) }
          const result = await jobsCollection.findOne(query);
          res.send(result)
       })
 
-      app.post('/job', async(req, res) =>{
+      app.post('/job', async (req, res) => {
          const job = req.body;
          const result = await jobsCollection.insertOne(job);
          res.send(result)
       })
 
-      app.delete('/job/:id', async(req, res) =>{
+      app.delete('/job/:id', async (req, res) => {
          const id = req.params.id;
-         const query = {_id : new ObjectId(id)}
+         const query = { _id: new ObjectId(id) }
          const result = await jobsCollection.deleteOne(query);
          res.send(result)
       })
@@ -122,6 +122,11 @@ async function run() {
 
 
       //blogs related api
+
+      app.get('/blogs', async (req, res) => {
+         const result = await blogsCollection.find().toArray();
+         res.send(result)
+      })
 
 
       // applied related api.
