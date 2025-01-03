@@ -126,8 +126,6 @@ async function run() {
 
     //blogs related api
 
-    //api for post a blog
-
     app.post("/post-blog", async (req, res) => {
       const blog = req.body;
       console.log(blog);
