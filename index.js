@@ -142,8 +142,6 @@ async function run() {
       res.send(result);
     });
 
-    // todo : unpush the recent blogs
-
     //api for recent blogs
     app.get("/recent-blogs", async (req, res) => {
       const result = await blogsCollection.find().toArray();
@@ -163,10 +161,7 @@ async function run() {
 
 
 
-
     // applied related api.
-
-    
 
     await client.db("admin").command({ ping: 1 });
     console.log(
