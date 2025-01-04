@@ -88,14 +88,14 @@ async function run() {
       const result = await jobsCollection
         .find()
         .sort({ _id: -1 })
-        .limit(6)
+        .limit(4)
         .toArray();
       res.send(result);
     });
 
     app.get("/jobs", async (req, res) => {
       const page = parseInt(req.query.page) || 0;
-      const limit = 6;
+      const limit = 4;
       const result = await jobsCollection
         .find()
         .skip(page * limit)
