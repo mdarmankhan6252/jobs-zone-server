@@ -34,8 +34,9 @@ async function run() {
     });
 
     app.get("/user/:email", async (req, res) => {
-      const email = req.params.email;
-      const query = { email };
+      const user = req.body;
+      const email = user.email;
+      const query = { email : email };
       const result = await usersCollection.findOne(query);
       res.send(result);
     });
@@ -49,7 +50,7 @@ async function run() {
 
     app.post("/user", async (req, res) => {
       const user = req.body;
-      const email = req.query.email;
+      const email = user.email;
       const query = { email };
       const existingUser = await usersCollection.findOne(query);
       if (existingUser) {
