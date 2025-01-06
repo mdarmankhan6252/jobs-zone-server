@@ -4,6 +4,8 @@ const app = express();
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 require("dotenv").config();
 const port = process.env.PORT || 5000;
+const stripe = require("stripe");
+const stripeInstance = new stripe(process.env.STRIPE_SECRET_KEY);
 
 app.use(cors());
 app.use(express.json());
@@ -88,14 +90,14 @@ async function run() {
       const result = await jobsCollection
         .find()
         .sort({ _id: -1 })
-        .limit(6)
+        .limit(4)
         .toArray();
       res.send(result);
     });
 
     app.get("/jobs", async (req, res) => {
       const page = parseInt(req.query.page) || 0;
-      const limit = 6;
+      const limit = 4;
       const result = await jobsCollection
         .find()
         .skip(page * limit)
@@ -126,9 +128,7 @@ async function run() {
 
     //blogs related api
 
-    //api for post a blog
-
-    app.post("/post-blog", async (req, res) => {
+    app.post("/blog", async (req, res) => {
       const blog = req.body;
       console.log(blog);
       const result = await blogsCollection.insertOne(blog);
@@ -162,13 +162,33 @@ async function run() {
 
     app.delete("/blog/:id", async (req, res) => {
       const id = req.params.id;
-      console.log(id);
       const query = { _id: new ObjectId(id) };
       const result = await blogsCollection.deleteOne(query);
       res.send(result);
     });
 
     // applied related api.
+
+    // payment related api
+
+    app.post("/paymentStripe", async (req, res) => {
+      const { price } = req.body;
+
+      const amount = parseInt(price * 100);
+
+      const paymentIntent = await stripeInstance.paymentIntents.create({
+        amount,
+        currency: "usd",
+        pament_method_types: ["card"],
+      });
+      console.log(paymentIntent.client_secret);
+
+      res.send({
+        clientSecret: paymentIntent.client_secret,
+      });
+    });
+
+    
 
     await client.db("admin").command({ ping: 1 });
     console.log(
