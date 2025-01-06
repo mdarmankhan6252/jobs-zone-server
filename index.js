@@ -88,14 +88,14 @@ async function run() {
       const result = await jobsCollection
         .find()
         .sort({ _id: -1 })
-        .limit(6)
+        .limit(4)
         .toArray();
       res.send(result);
     });
 
     app.get("/jobs", async (req, res) => {
       const page = parseInt(req.query.page) || 0;
-      const limit = 6;
+      const limit = 4;
       const result = await jobsCollection
         .find()
         .skip(page * limit)
@@ -126,7 +126,7 @@ async function run() {
 
     //blogs related api
 
-    app.post("/post-blog", async (req, res) => {
+    app.post("/blog", async (req, res) => {
       const blog = req.body;
       console.log(blog);
       const result = await blogsCollection.insertOne(blog);
@@ -158,7 +158,7 @@ async function run() {
 
     //api for delete a blog
 
-    app.delete("/delete-blog/:id", async (req, res) => {
+    app.delete("/blog/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await blogsCollection.deleteOne(query);
