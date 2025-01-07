@@ -36,7 +36,7 @@ async function run() {
     app.get("/user/:email", async (req, res) => {
       const user = req.body;
       const email = user.email;
-      const query = { email : email };
+      const query = { email: email };
       const result = await usersCollection.findOne(query);
       res.send(result);
     });
@@ -83,7 +83,9 @@ async function run() {
     //jobs related api
 
     app.get("/allJobs", async (req, res) => {
-      const result = await jobsCollection.find().toArray();
+      const email = req.query.email;
+      const query = { 'author.email': email }
+      const result = await jobsCollection.find(query).toArray();
       res.send(result);
     });
 
@@ -189,7 +191,7 @@ async function run() {
       });
     });
 
-    
+
 
     await client.db("admin").command({ ping: 1 });
     console.log(
